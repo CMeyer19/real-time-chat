@@ -1,17 +1,23 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function App() {
+  const [message, setMessage] = useState('');
+
   useEffect(() => {
-    fetch('/api').then(async x => {
-      const meh = await x.json();
-      console.log(meh);
-      debugger;
+    fetch('/api').then(async response => {
+      const responseData: { message: string } = await response.json();
+      setMessage(responseData.message);
+    }).catch(e => console.error(e));
+
+    fetch('/api/conversations').then(async response => {
+      const responseData: Array<unknown> = await response.json();
+      console.log(responseData);
     }).catch(e => console.error(e));
   }, []);
 
   return (
-    <p>Hello</p>
+    <p>{message}</p>
   );
 }
 
