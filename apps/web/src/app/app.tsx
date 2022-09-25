@@ -31,7 +31,7 @@ export function App() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <p>{message}</p>
-      
+
       <Grid container spacing={2}>
         <Grid xs={4}>
           <Item>xs=4</Item>
