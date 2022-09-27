@@ -1,47 +1,115 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { useEffect, useState } from "react";
-import Grid from "@mui/material/Grid";
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
+import React from "react";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import CssBaseline from "@mui/material/CssBaseline";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Drawer from "@mui/material/Drawer";
+import Divider from "@mui/material/Divider";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
+import ListItemText from "@mui/material/ListItemText";
+import Box from "@mui/material/Box";
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
+const drawerWidth = 340;
 
-export function App() {
-  const [message, setMessage] = useState('');
+axios.defaults.baseURL = 'api';
+const queryClient = new QueryClient();
 
-  useEffect(() => {
-    fetch('/api').then(async response => {
-      const responseData: { message: string } = await response.json();
-      setMessage(responseData.message);
-    }).catch(e => console.error(e));
+function Example() {
+  const { isLoading, error, data, isFetching } = useQuery(
+    ["conversations"],
+    () => axios.get('conversations').then((res) => res.data)
+  );
 
-    fetch('/api/conversations').then(async response => {
-      const responseData: Array<unknown> = await response.json();
-      console.log(responseData);
-    }).catch(e => console.error(e));
-  }, []);
+  console.log(data);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <p>{message}</p>
-
-      <Grid container spacing={2}>
-        <Grid xs={4}>
-          <Item>xs=4</Item>
-        </Grid>
-        <Grid xs={8}>
-          <Item>xs=8</Item>
-        </Grid>
-      </Grid>
-    </Box>
+    <div>
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline/>
+        <AppBar
+          position="fixed"
+          sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
+        >
+          <Toolbar>
+            <Typography variant="h6" noWrap component="div">
+              Permanent drawer
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              boxSizing: 'border-box',
+            },
+          }}
+          variant="permanent"
+          anchor="left"
+        >
+          <Toolbar/>
+          <Divider/>
+          <List>
+            {data?.map((item: any, index: number) => (
+              <ListItem key={item._id} disablePadding>
+                <ListItemButton>
+                  <ListItemText primary={item._id}/>
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+        <Box
+          component="main"
+          sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+        >
+          <Toolbar/>
+          <Typography paragraph>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
+            enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
+            imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
+            Convallis convallis tellus id interdum velit laoreet id donec ultrices.
+            Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
+            adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
+            nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
+            leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
+            feugiat vivamus at augue. At augue eget arcu dictum varius duis at
+            consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
+            sapien faucibus et molestie ac.
+          </Typography>
+          <Typography paragraph>
+            Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
+            eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
+            neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
+            tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
+            sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
+            tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
+            gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
+            et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
+            tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
+            eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
+            posuere sollicitudin aliquam ultrices sagittis orci a.
+          </Typography>
+        </Box>
+      </Box>
+    </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Example/>
+    </QueryClientProvider>
+  );
+}
