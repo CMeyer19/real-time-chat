@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React from "react";
+import React, { useEffect } from "react";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,7 +13,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/material/Box";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useParams } from "react-router-dom";
 
 const drawerWidth = 340;
 
@@ -57,7 +57,7 @@ function Example() {
 
         <List>
           {data?.map((item: any, index: number) => (
-            <ListItem key={item._id} component={Link} to="/design" disablePadding>
+            <ListItem key={item._id} component={Link} to={item._id} disablePadding>
               <ListItemButton>
                 <ListItemText primary={item._id}/>
               </ListItemButton>
@@ -73,10 +73,38 @@ function Example() {
         <Toolbar/>
 
         <Routes>
-          <Route path="/design" element={<p>Hello</p>}/>
+          <Route path="/:id" element={<Conversation/>}/>
         </Routes>
       </Box>
     </Box>
+  );
+}
+
+export function Conversation() {
+  const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    axios.get('messages').then((res) => {
+      console.log(res.data);
+    })
+  }, []);
+
+  const addMessage = (id: string | undefined) => {
+    if (!id) return;
+
+    axios.post('messages', {
+      text: 'hello',
+      conversationId: id
+    }).then(x => {
+      console.log(x);
+    });
+  }
+
+  return (
+    <div>
+      <p>{id}</p>
+      <button onClick={() => addMessage(id)}>Submit</button>
+    </div>
   );
 }
 

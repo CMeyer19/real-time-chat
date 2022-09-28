@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConversationsModule } from "./features/conversations/conversations.module";
 import { configuration } from "./configuration";
+import { MessagesModule } from "./features/messages/messages.module";
 
 const value: { connectionString: string; dbName: string; } = configuration();
 
@@ -19,7 +20,8 @@ const value: { connectionString: string; dbName: string; } = configuration();
       value.connectionString,
       { dbName: value.dbName }
     ),
-    ConversationsModule
+    ConversationsModule,
+    MessagesModule
   ],
   controllers: [AppController],
   providers: [AppService],
