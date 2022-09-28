@@ -10,17 +10,15 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@real-time-chat/util-api": ["libs/util-api/src/index.ts"],
+      "@real-time-chat/util-api/*": ["libs/util-api/src/lib/*"],
+      "@real-time-chat/util-shared": ["libs/util-shared/src/index.ts"]
+    }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }
