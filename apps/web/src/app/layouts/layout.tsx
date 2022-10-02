@@ -13,19 +13,19 @@ import ListItem from "@mui/material/ListItem";
 import { Link, Route, Routes } from "react-router-dom";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import { Conversation } from "./conversation";
+import Conversation from "../pages/conversation";
 import React from "react";
 
 const drawerWidth = 340;
 
 export function Layout() {
-  const { isLoading, error, data, isFetching } = useQuery(
+  const { data } = useQuery(
     ["conversations"],
     () => axios.get(baseApiRoute).then((res) => res.data)
   );
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', height: '100%' }}>
       <CssBaseline/>
       <AppBar
         position="fixed"
@@ -54,7 +54,7 @@ export function Layout() {
         <Divider/>
 
         <List>
-          {data?.map((item: any, index: number) => (
+          {data?.map((item: { _id: string }) => (
             <ListItem key={item._id} component={Link} to={item._id} disablePadding>
               <ListItemButton>
                 <ListItemText primary={item._id}/>
@@ -66,7 +66,14 @@ export function Layout() {
 
       <Box
         component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+        sx={{
+          flexGrow: 1,
+          bgcolor: 'background.default',
+          p: 3,
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%'
+        }}
       >
         <Toolbar/>
 
