@@ -7,8 +7,8 @@ interface IMessageProps {
 
 export default function Message({ message }: IMessageProps) {
   return (
-    <div className="flex">
-      <p>{message.createdAt}</p>
+    <div className="flex gap-2">
+      <p>{new Date(message.createdAt).toLocaleString()}</p>
       <p>{message.text}</p>
     </div>
   );

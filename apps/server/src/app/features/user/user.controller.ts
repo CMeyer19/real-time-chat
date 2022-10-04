@@ -4,7 +4,7 @@ import { MessagesService } from './messages.service';
 import { IAddMessageDto } from "../../dtos/message.dto";
 
 @Controller('messages')
-export class MessagesController {
+export class UserController {
   constructor(private readonly messagesService: MessagesService) {}
 
   @Get()

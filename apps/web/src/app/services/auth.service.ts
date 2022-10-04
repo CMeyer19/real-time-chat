@@ -1,0 +1,59 @@
+import firebase from 'firebase/compat/app';
+// import { getAuth as firebaseGetAuth } from 'firebase/auth';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA0voEqZPxWLwtPAupOZ2EQpo0zpQTDmJE",
+  authDomain: "real-time-chat-31ec8.firebaseapp.com",
+  projectId: "real-time-chat-31ec8",
+  storageBucket: "real-time-chat-31ec8.appspot.com",
+  messagingSenderId: "939780098557",
+  appId: "1:939780098557:web:78b4ca8a1174aaf4d13194"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+
+// export const getAuth = () => firebaseGetAuth();
+
+const setTokenValue = (token: string) => {
+  localStorage.setItem('token', JSON.stringify(token));
+}
+
+export const registerUser_async = async (email: string, password: string): Promise<string | undefined> => {
+  try {
+    const res = await auth.createUserWithEmailAndPassword(email, password);
+    const user = res.user;
+
+    if (!user) return undefined;
+
+    const userId: string = user.uid;
+
+    setTokenValue(userId);
+    return userId;
+  } catch (err) {
+    console.error(err);
+  }
+
+  return undefined;
+};
+
+export const signInWithEmailAndPassword_async = async (email: string, password: string): Promise<string | undefined> => {
+  try {
+    const result = await auth.signInWithEmailAndPassword(email, password);
+    console.log(result);
+
+    if (!result.user) return;
+
+    const userId: string = result.user.uid;
+
+    setTokenValue(userId);
+    return userId;
+  } catch (err) {
+    console.error(err);
+  }
+
+  return undefined;
+};
