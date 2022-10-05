@@ -2,6 +2,8 @@ import firebase from 'firebase/compat/app';
 // import { getAuth as firebaseGetAuth } from 'firebase/auth';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import axios from "axios";
+import { baseApiRoute } from "@real-time-chat/util-api/features/users";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA0voEqZPxWLwtPAupOZ2EQpo0zpQTDmJE",
@@ -18,8 +20,12 @@ const auth = firebase.auth();
 
 // export const getAuth = () => firebaseGetAuth();
 
-const setTokenValue = (token: string) => {
-  localStorage.setItem('token', JSON.stringify(token));
+const storeUserId = (userId: string) => {
+  localStorage.setItem('userId', userId);
+}
+
+export const getUserId = (): string | null => {
+  return localStorage.getItem('userId');
 }
 
 export const registerUser_async = async (email: string, password: string): Promise<string | undefined> => {
@@ -30,8 +36,11 @@ export const registerUser_async = async (email: string, password: string): Promi
     if (!user) return undefined;
 
     const userId: string = user.uid;
+    storeUserId(userId);
 
-    setTokenValue(userId);
+    const addedUserId = await axios.post(baseApiRoute, { userId });
+    console.log(addedUserId);
+
     return userId;
   } catch (err) {
     console.error(err);
@@ -49,7 +58,7 @@ export const signInWithEmailAndPassword_async = async (email: string, password: 
 
     const userId: string = result.user.uid;
 
-    setTokenValue(userId);
+    storeUserId(userId);
     return userId;
   } catch (err) {
     console.error(err);

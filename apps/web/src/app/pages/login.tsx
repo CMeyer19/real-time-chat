@@ -7,8 +7,6 @@ interface ILoginProps {
 }
 
 export default function Login({ setUser }: ILoginProps) {
-
-
   const emailInputRef = useRef<HTMLInputElement>();
   const passwordInputRef = useRef<HTMLInputElement>();
 

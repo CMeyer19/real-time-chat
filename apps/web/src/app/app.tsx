@@ -1,25 +1,24 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
 import { Layout } from "./layouts/layout";
 import React, { useEffect, useState } from "react";
 import Login from "./pages/login";
+import { getUserId } from "./services/auth.service";
 
 axios.defaults.baseURL = 'api';
 
 export const queryClient = new QueryClient();
 
 export default function App() {
-  const [authenticated, setAuthenticated] = useState<string | undefined>(undefined);
+  const [loggedInUserId, setLoggedInUserId] = useState<string | undefined>(getUserId() ?? undefined);
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem("token");
-    if (loggedInUser) setAuthenticated(loggedInUser);
+    const loggedInUserId = getUserId();
+
+    if (loggedInUserId) setLoggedInUserId(loggedInUserId);
   }, []);
 
-  if (!authenticated) {
-    return (<Login setUser={setAuthenticated}/>);
-  }
+  if (!loggedInUserId) return <Login setUser={setLoggedInUserId}/>
 
   return (
     <QueryClientProvider client={queryClient}>

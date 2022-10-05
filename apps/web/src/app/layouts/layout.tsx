@@ -15,6 +15,8 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Conversation from "../pages/conversation";
 import React from "react";
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
 
 const drawerWidth = 340;
 
@@ -49,7 +51,11 @@ export function Layout() {
         variant="permanent"
         anchor="left"
       >
-        <Toolbar/>
+        <Toolbar>
+          <IconButton>
+            <AddIcon/>
+          </IconButton>
+        </Toolbar>
 
         <Divider/>
 

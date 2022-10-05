@@ -7,8 +7,15 @@ import { AppService } from './app.service';
 import { ConversationsModule } from "./features/conversations/conversations.module";
 import { configuration } from "./configuration";
 import { MessagesModule } from "./features/messages/messages.module";
+import { UsersModule } from "./features/users/users.module";
 
 const value: { connectionString: string; dbName: string; } = configuration();
+
+const featureModules = [
+  ConversationsModule,
+  MessagesModule,
+  UsersModule
+];
 
 @Module({
   imports: [
@@ -20,8 +27,7 @@ const value: { connectionString: string; dbName: string; } = configuration();
       value.connectionString,
       { dbName: value.dbName }
     ),
-    ConversationsModule,
-    MessagesModule
+    ...featureModules
   ],
   controllers: [AppController],
   providers: [AppService],

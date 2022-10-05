@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { User, UserSchemaName } from "./user.schema";
 
 export type ConversationDocument = Conversation & Document;
@@ -9,7 +9,7 @@ export class Conversation {
   @Prop()
   isGroupChat: boolean;
 
-  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: UserSchemaName }])
+  @Prop([{ type: Types.ObjectId, ref: UserSchemaName }])
   participants: Array<User>;
 }
 
