@@ -19,4 +19,10 @@ export class UserAssociationsService {
 
     return result._id;
   }
+
+  async getUserAssociations(id: string): Promise<Array<UserAssociation>> {
+    return this.userAssociationModel.find({
+      $or: [{ association: id }, { initiator: id }]
+    });
+  }
 }

@@ -2,7 +2,7 @@ import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Message, MessageDocument } from '../../db/schemas/message.schema';
-import { IAddMessageDto } from '../../dtos/message.dto';
+import { IAddMessageDto } from '@real-time-chat/util-api/features/messages/abstractions/message.dto';
 
 @Injectable()
 export class MessagesService {
@@ -20,5 +20,9 @@ export class MessagesService {
 
   async findAll(): Promise<Message[]> {
     return this.messageModel.find().exec();
+  }
+
+  async getMessagesForConversation(conversationId: string): Promise<Message[]> {
+    return this.messageModel.find({ conversation: conversationId }).exec();
   }
 }

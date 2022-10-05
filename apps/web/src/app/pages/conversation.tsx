@@ -35,7 +35,7 @@ export default function Conversation() {
 
   return (
     <div className="h-full flex flex-col">
-      <MessageList/>
+      <MessageList conversationId={id}/>
 
       <MessageInput onSubmitMessage={submitMessage}/>
     </div>

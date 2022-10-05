@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 
 import { UserAssociationsService } from './user-associations.service';
 import {
@@ -9,6 +9,11 @@ import { baseApiRoute } from '@real-time-chat/util-api/features/user-association
 @Controller(baseApiRoute)
 export class UserAssociationsController {
   constructor(private readonly userAssociationsService: UserAssociationsService) {
+  }
+
+  @Get(':id')
+  getUserContacts(@Param('id') id: string) {
+    return this.userAssociationsService.getUserAssociations(id);
   }
 
   @Post()

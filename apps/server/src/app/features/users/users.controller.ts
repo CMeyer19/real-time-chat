@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 
 import { UsersService } from './users.service';
 import { baseApiRoute } from "@real-time-chat/util-api/features/users";
-import { IAddUserDto } from "../../dtos/user.dto";
+import { IAddUserDto } from "@real-time-chat/util-api/features/users/abstractions/user.dto";
 
 @Controller(baseApiRoute)
 export class UsersController {

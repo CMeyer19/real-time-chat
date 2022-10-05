@@ -1,9 +1,10 @@
 import IconButton from "@mui/material/IconButton";
-import AddIcon from "@mui/icons-material/Add";
 import React, { useRef } from "react";
 import Modal from '@mui/material/Modal';
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import AddCommentIcon from '@mui/icons-material/AddComment';
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { baseApiRoute } from "@real-time-chat/util-api/features/user-associations";
@@ -24,7 +25,7 @@ const style = {
   p: 4,
 };
 
-export function ToolbarActions() {
+export function InvitePersonAction() {
   const userIdInputRef = useRef<HTMLInputElement>();
 
   const [open, setOpen] = React.useState(false);
@@ -43,9 +44,9 @@ export function ToolbarActions() {
   }
 
   return (
-    <div>
+    <>
       <IconButton onClick={handleOpen}>
-        <AddIcon/>
+        <PersonAddIcon/>
       </IconButton>
 
       <Modal
@@ -65,6 +66,22 @@ export function ToolbarActions() {
           <Button onClick={inviteUser}>Invite</Button>
         </Box>
       </Modal>
-    </div>
+    </>
+  );
+}
+
+interface IToolbarActionsProps {
+  openConversation: () => void;
+}
+
+export function ToolbarActions({ openConversation }: IToolbarActionsProps) {
+  return (
+    <>
+      <IconButton onClick={openConversation}>
+        <AddCommentIcon/>
+      </IconButton>
+
+      <InvitePersonAction/>
+    </>
   );
 }

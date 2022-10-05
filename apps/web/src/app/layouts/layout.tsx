@@ -1,6 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { baseApiRoute } from "@real-time-chat/util-api/features/conversations";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppBar from "@mui/material/AppBar";
@@ -8,22 +5,40 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import { Link, Route, Routes } from "react-router-dom";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
+import { Route, Routes } from "react-router-dom";
 import Conversation from "../pages/conversation";
-import React from "react";
+import React, { useState } from "react";
 import { ToolbarActions } from "../components/toolbar-actions";
+import { ContactList } from "../components/contact-list";
+import { ConversationList } from "../components/conversation-list";
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import axios from "axios";
+import { baseApiRoute } from "@real-time-chat/util-api/features/conversations";
+import { IAddConversationDto } from "@real-time-chat/util-api/features/conversations/abstractions/conversation.dto";
+import { getUserId } from "../services/auth.service";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const drawerWidth = 340;
 
 export function Layout() {
-  const { data } = useQuery(
-    ["conversations"],
-    () => axios.get(baseApiRoute).then((res) => res.data)
-  );
+  const queryClient = useQueryClient();
+  const [showContacts, setShowContacts] = useState(false);
+
+  const doShowContacts = () => setShowContacts(true);
+  const doHideContacts = () => setShowContacts(false);
+
+  const createConversation = async (userId: string) => {
+    const currentUserId = getUserId();
+    if (currentUserId == null) return;
+
+    const requestBody: IAddConversationDto = { isGroupChat: false, participants: [userId, currentUserId] };
+    await axios.post(baseApiRoute, requestBody);
+  }
+
+  const { mutate } = useMutation(createConversation, {
+    onSuccess: () => queryClient.invalidateQueries(['conversations']),
+  });
 
   return (
     <Box sx={{ display: 'flex', height: '100%' }}>
@@ -51,21 +66,17 @@ export function Layout() {
         anchor="left"
       >
         <Toolbar>
-          <ToolbarActions/>
-
+          {showContacts
+            ? <IconButton onClick={doHideContacts}>
+              <ArrowBackIcon/>
+            </IconButton>
+            : <ToolbarActions openConversation={doShowContacts}/>
+          }
         </Toolbar>
 
         <Divider/>
 
-        <List>
-          {data?.map((item: { _id: string }) => (
-            <ListItem key={item._id} component={Link} to={item._id} disablePadding>
-              <ListItemButton>
-                <ListItemText primary={item._id}/>
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        {showContacts ? <ContactList onContactClick={(id: string) => mutate(id)}/> : <ConversationList/>}
       </Drawer>
 
       <Box

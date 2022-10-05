@@ -5,13 +5,17 @@ import Message from "./message";
 import { IMessage } from "@real-time-chat/util-api/features/messages/abstractions/message.model";
 import { useQuery } from "@tanstack/react-query";
 
-export default function MessageList() {
+interface IMessageListProps {
+  conversationId: string;
+}
+
+export default function MessageList({ conversationId }: IMessageListProps) {
   const { data } = useQuery(
-    ["messages"],
-    () => axios.get(baseApiRoute).then((res: AxiosResponse<Array<IMessage>>) => res.data)
+    ["messages", conversationId],
+    () => axios.get(`${baseApiRoute}/${conversationId}`).then((res: AxiosResponse<Array<IMessage>>) => res.data)
   );
 
-  if (!data) return (<p>No messages</p>);
+  if (!data?.length) return (<p>No messages</p>);
 
   return (
     <div>

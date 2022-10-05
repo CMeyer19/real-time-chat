@@ -1,15 +1,15 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 
 import { MessagesService } from './messages.service';
-import { IAddMessageDto } from "../../dtos/message.dto";
+import { IAddMessageDto } from "@real-time-chat/util-api/features/messages/abstractions/message.dto";
 
 @Controller('messages')
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
 
-  @Get()
-  getData() {
-    return this.messagesService.findAll();
+  @Get(':id')
+  getData(@Param('id') id: string) {
+    return this.messagesService.getMessagesForConversation(id);
   }
 
   @Post()

@@ -2,7 +2,7 @@ import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../../db/schemas/user.schema';
-import { IAddUserDto } from '../../dtos/user.dto';
+import { IAddUserDto } from '@real-time-chat/util-api/features/users/abstractions/user.dto';
 
 @Injectable()
 export class UsersService {
