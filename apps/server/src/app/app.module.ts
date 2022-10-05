@@ -8,13 +8,15 @@ import { ConversationsModule } from "./features/conversations/conversations.modu
 import { configuration } from "./configuration";
 import { MessagesModule } from "./features/messages/messages.module";
 import { UsersModule } from "./features/users/users.module";
+import { UserAssociationsModule } from "./features/user-associations/user-associations.module";
 
 const value: { connectionString: string; dbName: string; } = configuration();
 
 const featureModules = [
   ConversationsModule,
   MessagesModule,
-  UsersModule
+  UsersModule,
+  UserAssociationsModule
 ];
 
 @Module({

@@ -15,8 +15,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Conversation from "../pages/conversation";
 import React from "react";
-import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
+import { ToolbarActions } from "../components/toolbar-actions";
 
 const drawerWidth = 340;
 
@@ -52,9 +51,8 @@ export function Layout() {
         anchor="left"
       >
         <Toolbar>
-          <IconButton>
-            <AddIcon/>
-          </IconButton>
+          <ToolbarActions/>
+
         </Toolbar>
 
         <Divider/>

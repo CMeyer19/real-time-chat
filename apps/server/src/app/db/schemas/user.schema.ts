@@ -6,7 +6,7 @@ export type UserDocument = User & Document;
 @Schema()
 export class User {
   @Prop({ required: true, unique: true })
-  userId: string
+  _id: string
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

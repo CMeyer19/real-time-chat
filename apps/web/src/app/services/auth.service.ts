@@ -57,7 +57,6 @@ export const signInWithEmailAndPassword_async = async (email: string, password: 
     if (!result.user) return;
 
     const userId: string = result.user.uid;
-
     storeUserId(userId);
     return userId;
   } catch (err) {
