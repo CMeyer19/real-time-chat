@@ -21,18 +21,9 @@ export default function App() {
     socket.on('connect', () => {
       console.log('Connected');
 
-      socket.emit('events', { test: 'test' });
-      socket.emit('identity', 0, (response: any) =>
-        console.log('Identity:', response),
-      );
-    });
-
-    socket.on('events', (data) => {
-      console.log('event', data);
-    });
-
-    socket.on('exception', (data) => {
-      console.log('event', data);
+      socket.on('messages', (data) => {
+        console.log('message', data);
+      });
     });
 
     socket.on('disconnect', () => {
@@ -41,8 +32,8 @@ export default function App() {
 
     return () => {
       socket.off('connect');
+      socket.off('messages');
       socket.off('disconnect');
-      socket.off('pong');
     };
   }, []);
 

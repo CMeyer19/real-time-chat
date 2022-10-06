@@ -1,5 +1,5 @@
 import firebase from 'firebase/compat/app';
-// import { getAuth as firebaseGetAuth } from 'firebase/auth';
+import { getAuth as firebaseGetAuth } from 'firebase/auth';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import axios from "axios";
@@ -18,14 +18,24 @@ firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 
-// export const getAuth = () => firebaseGetAuth();
+export const getAuth = () => firebaseGetAuth();
 
 const storeUserId = (userId: string) => {
   localStorage.setItem('userId', userId);
 }
 
+const storeAccessToken = async () => {
+  const idToken: string = await auth.currentUser?.getIdToken() ?? '';
+
+  localStorage.setItem('idToken', idToken);
+}
+
 export const getUserId = (): string | null => {
   return localStorage.getItem('userId');
+}
+
+export const getAccessToken = (): string | null => {
+  return localStorage.getItem('idToken');
 }
 
 export const registerUser_async = async (email: string, password: string): Promise<string | undefined> => {
@@ -52,12 +62,14 @@ export const registerUser_async = async (email: string, password: string): Promi
 export const signInWithEmailAndPassword_async = async (email: string, password: string): Promise<string | undefined> => {
   try {
     const result = await auth.signInWithEmailAndPassword(email, password);
-    console.log(result);
 
     if (!result.user) return;
 
+    await storeAccessToken();
+
     const userId: string = result.user.uid;
     storeUserId(userId);
+
     return userId;
   } catch (err) {
     console.error(err);
@@ -65,3 +77,14 @@ export const signInWithEmailAndPassword_async = async (email: string, password: 
 
   return undefined;
 };
+
+axios.interceptors.request.use((config) => {
+  if (!config.headers) return config;
+
+  const accessToken: string | null = getAccessToken()
+  if (!accessToken) return config;
+
+  config.headers['Authorization'] = accessToken;
+
+  return config;
+});

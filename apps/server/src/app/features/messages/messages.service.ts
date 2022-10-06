@@ -6,20 +6,16 @@ import { IAddMessageDto } from '@real-time-chat/util-api/features/messages/abstr
 
 @Injectable()
 export class MessagesService {
-  constructor(@InjectModel(Message.name) private messageModel: Model<MessageDocument>) {
+  constructor(
+    @InjectModel(Message.name) private messageModel: Model<MessageDocument>
+  ) {
   }
 
-  async create(addMessageRequest: IAddMessageDto): Promise<string> {
-    const result: MessageDocument = await this.messageModel.create({
+  create(addMessageRequest: IAddMessageDto): Promise<Message> {
+    return this.messageModel.create({
       text: addMessageRequest.text,
       conversation: addMessageRequest.conversationId
     });
-
-    return result._id;
-  }
-
-  async findAll(): Promise<Message[]> {
-    return this.messageModel.find().exec();
   }
 
   async getMessagesForConversation(conversationId: string): Promise<Message[]> {

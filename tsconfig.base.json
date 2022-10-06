@@ -17,7 +17,8 @@
     "paths": {
       "@real-time-chat/util-api": ["libs/util-api/src/index.ts"],
       "@real-time-chat/util-api/*": ["libs/util-api/src/lib/*"],
-      "@real-time-chat/util-shared": ["libs/util-shared/src/index.ts"]
+      "@real-time-chat/util-shared": ["libs/util-shared/src/index.ts"],
+      "@real-time-chat/util-shared/*": ["libs/util-shared/src/lib/*"],
     }
   },
   "exclude": ["node_modules", "tmp"]

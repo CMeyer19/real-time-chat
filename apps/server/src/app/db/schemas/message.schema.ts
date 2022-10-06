@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { Conversation, ConversationSchemaName } from './conversation.schema';
 import { User, UserSchemaName } from "./user.schema";
 
@@ -10,13 +10,13 @@ export class Message {
   @Prop()
   text: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: UserSchemaName })
+  @Prop({ type: Types.ObjectId, ref: UserSchemaName })
   createdBy: User;
 
   @Prop({ type: Date, default: Date.now })
   createdAt: Date;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: ConversationSchemaName })
+  @Prop({ type: Types.ObjectId, ref: ConversationSchemaName })
   conversation: Conversation;
 }
 
