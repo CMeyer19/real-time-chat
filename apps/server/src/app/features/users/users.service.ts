@@ -15,7 +15,8 @@ export class UsersService {
 
   public async create(addUserRequest: IAddUserDto): Promise<string> {
     const result: UserDocument = await this.userModel.create({
-      _id: addUserRequest.userId
+      _id: addUserRequest.userId,
+      username: addUserRequest.username
     });
 
     return result._id;

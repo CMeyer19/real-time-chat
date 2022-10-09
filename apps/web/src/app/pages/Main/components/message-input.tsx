@@ -11,14 +11,12 @@ export default function MessageInput({ onSubmitMessage }: IMessageInputProps) {
   const onKeyPress = (e: { key: string }) => {
     if (e.key !== 'Enter') return;
 
-    console.log(messageInputRef);
     const currentMessage = messageInputRef.current;
+    if (!currentMessage) return;
 
-    if (currentMessage) {
-      const currentValue = currentMessage.value;
-      currentMessage.value = '';
-      onSubmitMessage(currentValue);
-    }
+    const currentValue = currentMessage.value;
+    currentMessage.value = '';
+    onSubmitMessage(currentValue);
   }
 
   return (

@@ -2,6 +2,7 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "components": "libs/components",
     "server": "apps/server",
     "util-api": "libs/util-api",
     "util-shared": "libs/util-shared",

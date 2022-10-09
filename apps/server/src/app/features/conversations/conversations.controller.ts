@@ -1,10 +1,8 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
-import { Request } from 'express';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { baseApiRoute } from '@real-time-chat/util-api/features/conversations/route.constant';
 
 import { ConversationsService } from './conversations.service';
 import { IAddConversationDto } from "@real-time-chat/util-api/features/conversations/abstractions/conversation.dto";
-import { parseJwt } from "@real-time-chat/util-shared/helpers/jwt-utils";
 
 @Controller(baseApiRoute)
 export class ConversationsController {
@@ -12,8 +10,7 @@ export class ConversationsController {
   }
 
   @Get()
-  getData(@Req() req: Request) {
-    console.log(parseJwt(req.header('Authorization')));
+  getData() {
     return this.conversationsService.findAll();
   }
 

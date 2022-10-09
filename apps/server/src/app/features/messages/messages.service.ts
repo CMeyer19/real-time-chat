@@ -11,10 +11,11 @@ export class MessagesService {
   ) {
   }
 
-  create(addMessageRequest: IAddMessageDto): Promise<Message> {
+  create(addMessageRequest: IAddMessageDto & { createdByUserId: string }): Promise<Message> {
     return this.messageModel.create({
       text: addMessageRequest.text,
-      conversation: addMessageRequest.conversationId
+      conversation: addMessageRequest.conversationId,
+      createdBy: addMessageRequest.createdByUserId
     });
   }
 

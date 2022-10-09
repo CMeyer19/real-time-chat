@@ -3,4 +3,5 @@ export interface IMessage {
   text: string;
   conversation: string;
   createdAt: string
+  createdBy: string
 }

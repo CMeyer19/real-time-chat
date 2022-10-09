@@ -8,7 +8,7 @@ import AddCommentIcon from '@mui/icons-material/AddComment';
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { baseApiRoute } from "@real-time-chat/util-api/features/user-associations";
-import { getUserId } from "../services/auth.service";
+import { getUserId } from "@real-time-chat/util-shared/auth/auth.service";
 import {
   IAddUserAssociationDto
 } from "@real-time-chat/util-api/features/user-associations/abstractions/user-association.dto";

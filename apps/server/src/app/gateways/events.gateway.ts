@@ -1,5 +1,6 @@
 import { WebSocketGateway, WebSocketServer, } from '@nestjs/websockets';
 import { Server } from 'socket.io';
+import { IMessageEvent } from "@real-time-chat/util-api/gateways/message-event.interface";
 
 @WebSocketGateway({
   cors: {
@@ -10,7 +11,7 @@ export class EventsGateway {
   @WebSocketServer()
   server: Server;
 
-  public sendMessageEvent(message: any): void {
-    this.server.emit('messages', message);
+  public sendMessageEvent(event: IMessageEvent): void {
+    this.server.emit('messages', event);
   }
 }

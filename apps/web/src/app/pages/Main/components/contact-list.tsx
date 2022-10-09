@@ -6,7 +6,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { baseApiRoute } from "@real-time-chat/util-api/features/user-associations";
-import { getUserId } from "../services/auth.service";
+import { getUserId } from "@real-time-chat/util-shared/auth/auth.service";
 
 interface IContactListProps {
   onContactClick: (id: string) => void;

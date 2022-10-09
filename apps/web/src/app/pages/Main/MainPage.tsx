@@ -5,23 +5,25 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
-import { Route, Routes } from "react-router-dom";
-import Conversation from "../pages/conversation";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import { ToolbarActions } from "../components/toolbar-actions";
-import { ContactList } from "../components/contact-list";
-import { ConversationList } from "../components/conversation-list";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import axios from "axios";
 import { baseApiRoute } from "@real-time-chat/util-api/features/conversations";
 import { IAddConversationDto } from "@real-time-chat/util-api/features/conversations/abstractions/conversation.dto";
-import { getUserId } from "../services/auth.service";
+import { getUserId, logout_async } from "@real-time-chat/util-shared/auth/auth.service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ContactList } from "./components/contact-list";
+import { ConversationList } from "./components/conversation-list";
+import { ToolbarActions } from "./components/toolbar-actions";
+import LogoutIcon from '@mui/icons-material/Logout';
+import Conversation from "./components/conversation";
 
 const drawerWidth = 340;
 
-export function Layout() {
+export default () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [showContacts, setShowContacts] = useState(false);
 
@@ -40,19 +42,30 @@ export function Layout() {
     onSuccess: () => queryClient.invalidateQueries(['conversations']),
   });
 
+  const logout = async () => {
+    await logout_async();
+    navigate('/login');
+  }
+
   return (
     <Box sx={{ display: 'flex', height: '100%' }}>
       <CssBaseline/>
+
       <AppBar
         position="fixed"
         sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
       >
-        <Toolbar>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h6" noWrap component="div">
             Permanent drawer
           </Typography>
+
+          <IconButton onClick={logout}>
+            <LogoutIcon/>
+          </IconButton>
         </Toolbar>
       </AppBar>
+
       <Drawer
         sx={{
           width: drawerWidth,

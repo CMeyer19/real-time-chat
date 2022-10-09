@@ -1,5 +1,4 @@
 import firebase from 'firebase/compat/app';
-import { getAuth as firebaseGetAuth } from 'firebase/auth';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import axios from "axios";
@@ -17,8 +16,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
-
-export const getAuth = () => firebaseGetAuth();
 
 const storeUserId = (userId: string) => {
   localStorage.setItem('userId', userId);
@@ -38,44 +35,38 @@ export const getAccessToken = (): string | null => {
   return localStorage.getItem('idToken');
 }
 
-export const registerUser_async = async (email: string, password: string): Promise<string | undefined> => {
-  try {
-    const res = await auth.createUserWithEmailAndPassword(email, password);
-    const user = res.user;
+export const logout_async = async (): Promise<void> => {
+  await auth.signOut();
+  localStorage.removeItem('idToken');
+  localStorage.removeItem('userId');
+}
 
-    if (!user) return undefined;
+export const registerUser_async = async (email: string, password: string): Promise<string> => {
+  const response = await auth.createUserWithEmailAndPassword(email, password);
+  const user = response.user;
 
-    const userId: string = user.uid;
-    storeUserId(userId);
+  if (!user) throw new Error("Something went wrong in user creation process.");
 
-    const addedUserId = await axios.post(baseApiRoute, { userId });
-    console.log(addedUserId);
+  const userId: string = user.uid;
+  storeUserId(userId);
 
-    return userId;
-  } catch (err) {
-    console.error(err);
-  }
+  await axios.post(baseApiRoute, { userId });
 
-  return undefined;
+  return userId;
 };
 
-export const signInWithEmailAndPassword_async = async (email: string, password: string): Promise<string | undefined> => {
-  try {
-    const result = await auth.signInWithEmailAndPassword(email, password);
+export const signInWithEmailAndPassword_async = async (email: string, password: string): Promise<string> => {
+  const response = await auth.signInWithEmailAndPassword(email, password);
+  const user = response.user;
 
-    if (!result.user) return;
+  if (!user) throw new Error("Something went wrong in user sign-in process.");
 
-    await storeAccessToken();
+  await storeAccessToken();
 
-    const userId: string = result.user.uid;
-    storeUserId(userId);
+  const userId: string = user.uid;
+  storeUserId(userId);
 
-    return userId;
-  } catch (err) {
-    console.error(err);
-  }
-
-  return undefined;
+  return userId;
 };
 
 axios.interceptors.request.use((config) => {
