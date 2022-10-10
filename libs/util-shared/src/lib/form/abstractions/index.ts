@@ -1,4 +1,4 @@
-export { FormInputActionKind } from './enums/form-input-action-kind.enum';
+export * from './enums/form-input-action-kind.enum';
 
-export { IFormInputState, FormInputState } from './models/form-input-state';
-export { IFormInputAction } from './models/form-input-action';
+export * from './models/form-input-state';
+export * from './models/form-input-action';

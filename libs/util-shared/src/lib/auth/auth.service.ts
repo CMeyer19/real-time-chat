@@ -2,7 +2,6 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import axios from "axios";
-import { baseApiRoute } from "@real-time-chat/util-api/features/users";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA0voEqZPxWLwtPAupOZ2EQpo0zpQTDmJE",
@@ -37,6 +36,7 @@ export const getAccessToken = (): string | null => {
 
 export const logout_async = async (): Promise<void> => {
   await auth.signOut();
+
   localStorage.removeItem('idToken');
   localStorage.removeItem('userId');
 }
@@ -49,8 +49,6 @@ export const registerUser_async = async (email: string, password: string): Promi
 
   const userId: string = user.uid;
   storeUserId(userId);
-
-  await axios.post(baseApiRoute, { userId });
 
   return userId;
 };
@@ -72,7 +70,7 @@ export const signInWithEmailAndPassword_async = async (email: string, password: 
 axios.interceptors.request.use((config) => {
   if (!config.headers) return config;
 
-  const accessToken: string | null = getAccessToken()
+  const accessToken: string | null = getAccessToken();
   if (!accessToken) return config;
 
   config.headers['Authorization'] = accessToken;
