@@ -15,6 +15,6 @@ export class ConversationsService {
   }
 
   async findAll(): Promise<Conversation[]> {
-    return this.conversationModel.find().exec();
+    return this.conversationModel.find().populate('participants').exec();
   }
 }

@@ -10,7 +10,7 @@ export class Message {
   @Prop()
   text: string;
 
-  @Prop({ type: Types.ObjectId, ref: UserSchemaName })
+  @Prop({ type: String, ref: UserSchemaName })
   createdBy: User;
 
   @Prop({ type: Date, default: Date.now })

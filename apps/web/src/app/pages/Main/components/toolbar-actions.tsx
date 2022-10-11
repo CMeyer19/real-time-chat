@@ -25,20 +25,20 @@ const style = {
   p: 4,
 };
 
-export function InvitePersonAction() {
-  const userIdInputRef = useRef<HTMLInputElement>();
+const InvitePersonAction = () => {
+  const usernameInputRef = useRef<HTMLInputElement>();
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const inviteUser = async () => {
-    const currentUserId = userIdInputRef.current;
+    const username = usernameInputRef.current;
     const initiatorUserId = getUserId();
 
-    if (!currentUserId || !initiatorUserId) return;
+    if (!username || !initiatorUserId) return;
 
-    const data: IAddUserAssociationDto = { initiator: initiatorUserId, association: currentUserId.value };
+    const data: IAddUserAssociationDto = { initiator: initiatorUserId, association: username.value };
     const response = await axios.post(baseApiRoute, data);
     console.log(response);
   }
@@ -57,8 +57,8 @@ export function InvitePersonAction() {
       >
         <Box sx={style}>
           <TextField
-            inputRef={userIdInputRef}
-            label="UserId"
+            inputRef={usernameInputRef}
+            label="Username"
             variant="outlined"
             className="w-full"
           />
@@ -74,7 +74,7 @@ interface IToolbarActionsProps {
   openConversation: () => void;
 }
 
-export function ToolbarActions({ openConversation }: IToolbarActionsProps) {
+const ToolbarActions = ({ openConversation }: IToolbarActionsProps) => {
   return (
     <>
       <IconButton onClick={openConversation}>
@@ -85,3 +85,5 @@ export function ToolbarActions({ openConversation }: IToolbarActionsProps) {
     </>
   );
 }
+
+export { InvitePersonAction, ToolbarActions };

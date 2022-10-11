@@ -13,6 +13,15 @@ export class UsersService {
     return this.userModel.findById(id).exec();
   }
 
+  public async resolveUserIdFromUsername(username: string): Promise<string> {
+    const result = await this.userModel
+      .findOne({ username })
+      .select({ _id: 1 })
+      .exec();
+
+    return result._id;
+  }
+
   public async create(addUserRequest: IAddUserDto): Promise<string> {
     const result: UserDocument = await this.userModel.create({
       _id: addUserRequest.userId,

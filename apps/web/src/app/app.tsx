@@ -8,6 +8,7 @@ import RegisterPage from "./pages/Register/RegisterPage";
 import NotFoundPage from "./pages/NotFound/NotFoundPage";
 import MainPage from "./pages/Main/MainPage";
 import PrivateRoutes from "@real-time-chat/components/PrivateRoutes/PrivateRoutes";
+import Conversation from "./pages/Main/components/conversation";
 
 axios.defaults.baseURL = 'api';
 
@@ -34,7 +35,9 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<PrivateRoutes/>}>
-            <Route path='/' element={<MainPage/>}/>
+            <Route path='/' element={<MainPage/>}>
+              <Route path=":id" element={<Conversation/>}/>
+            </Route>
           </Route>
 
           <Route path='/login' element={<LoginPage/>}/>

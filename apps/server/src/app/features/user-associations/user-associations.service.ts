@@ -21,8 +21,10 @@ export class UserAssociationsService {
   }
 
   async getUserAssociations(id: string): Promise<Array<UserAssociation>> {
-    return this.userAssociationModel.find({
-      $or: [{ association: id }, { initiator: id }]
-    });
+    return this.userAssociationModel
+      .find({
+        $or: [{ association: id }, { initiator: id }]
+      })
+      .populate('association initiator');
   }
 }

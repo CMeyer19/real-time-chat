@@ -5,7 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -18,7 +18,6 @@ import { ContactList } from "./components/contact-list";
 import { ConversationList } from "./components/conversation-list";
 import { ToolbarActions } from "./components/toolbar-actions";
 import LogoutIcon from '@mui/icons-material/Logout';
-import Conversation from "./components/conversation";
 
 const drawerWidth = 340;
 
@@ -39,7 +38,10 @@ export default () => {
   }
 
   const { mutate } = useMutation(createConversation, {
-    onSuccess: () => queryClient.invalidateQueries(['conversations']),
+    onSuccess: () => {
+      doShowContacts();
+      return queryClient.invalidateQueries(['conversations']);
+    },
   });
 
   const logout = async () => {
@@ -105,9 +107,7 @@ export default () => {
       >
         <Toolbar/>
 
-        <Routes>
-          <Route path="/:id" element={<Conversation/>}/>
-        </Routes>
+        <Outlet/>
       </Box>
     </Box>
   );

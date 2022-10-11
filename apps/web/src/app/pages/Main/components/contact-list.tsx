@@ -7,6 +7,10 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { baseApiRoute } from "@real-time-chat/util-api/features/user-associations";
 import { getUserId } from "@real-time-chat/util-shared/auth/auth.service";
+import {
+  IUserAssociation
+} from "@real-time-chat/util-api/features/user-associations/abstractions/user-association.dto";
+import { IUser } from "@real-time-chat/util-api/features/users/abstractions/user.dto";
 
 interface IContactListProps {
   onContactClick: (id: string) => void;
@@ -15,15 +19,15 @@ interface IContactListProps {
 export function ContactList({ onContactClick }: IContactListProps) {
   const { data } = useQuery(
     ["user-associations"],
-    () => axios.get(`${baseApiRoute}/${getUserId()}`).then((res) => res.data)
+    () => axios.get<Array<IUserAssociation>>(`${baseApiRoute}/${getUserId()}`).then(res => res.data)
   );
 
   return (
     <List>
-      {data?.map((item: { _id: string }) => (
-        <ListItem key={item._id} onClick={() => onContactClick(item._id)} disablePadding>
+      {data?.map(({ _id, association }) => (
+        <ListItem key={_id} onClick={() => onContactClick(_id)} disablePadding>
           <ListItemButton>
-            <ListItemText primary={item._id}/>
+            <ListItemText primary={(association as IUser).username}/>
           </ListItemButton>
         </ListItem>
       ))}
