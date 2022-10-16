@@ -15,8 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@real-time-chat/components": ["libs/components/src/index.ts"],
-      "@real-time-chat/components/*": ["libs/components/src/lib/*"],
+      "@real-time-chat/react-shared": ["libs/react-shared/src/index.ts"],
+      "@real-time-chat/react-shared/*": ["libs/react-shared/src/lib/*"],
+      "@real-time-chat/shared": ["libs/shared/src/index.ts"],
+      "@real-time-chat/shared/*": ["libs/shared/src/lib/*"],
       "@real-time-chat/util-api": ["libs/util-api/src/index.ts"],
       "@real-time-chat/util-api/*": ["libs/util-api/src/lib/*"],
       "@real-time-chat/util-shared": ["libs/util-shared/src/index.ts"],

@@ -8,9 +8,8 @@ import AddCommentIcon from '@mui/icons-material/AddComment';
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { baseApiRoute } from "@real-time-chat/util-api/features/user-associations";
-import { getUserId } from "@real-time-chat/util-shared/auth/auth.service";
 import {
-  IAddUserAssociationDto
+  IAddUserAssociationRequest
 } from "@real-time-chat/util-api/features/user-associations/abstractions/user-association.dto";
 
 const style = {
@@ -34,11 +33,10 @@ const InvitePersonAction = () => {
 
   const inviteUser = async () => {
     const username = usernameInputRef.current;
-    const initiatorUserId = getUserId();
 
-    if (!username || !initiatorUserId) return;
+    if (!username) return;
 
-    const data: IAddUserAssociationDto = { initiator: initiatorUserId, association: username.value };
+    const data: IAddUserAssociationRequest = { associationUsername: username.value };
     const response = await axios.post(baseApiRoute, data);
     console.log(response);
   }

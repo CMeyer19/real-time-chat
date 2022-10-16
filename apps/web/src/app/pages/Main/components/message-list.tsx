@@ -16,7 +16,7 @@ export default function MessageList({ conversationId }: IMessageListProps) {
 
   const { data } = useQuery(
     ["messages", conversationId],
-    () => axios.get(`${baseApiRoute}/${conversationId}`).then((res: AxiosResponse<Array<IMessage>>) => res.data)
+    ({ signal }) => axios.get(`${baseApiRoute}/${conversationId}`, { signal }).then((res: AxiosResponse<Array<IMessage>>) => res.data)
   );
 
   useEffect(() => {

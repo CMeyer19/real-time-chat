@@ -13,8 +13,8 @@ export class UserAssociationsService {
 
   async create(addUserAssociationRequest: IAddUserAssociationDto): Promise<string> {
     const result: UserAssociationDocument = await this.userAssociationModel.create({
-      initiator: addUserAssociationRequest.initiator,
-      association: addUserAssociationRequest.association
+      initiator: addUserAssociationRequest.initiatorUserId,
+      association: addUserAssociationRequest.associationUserId
     });
 
     return result._id;

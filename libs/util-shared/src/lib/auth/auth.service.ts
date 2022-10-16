@@ -2,6 +2,8 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import axios from "axios";
+import { baseApiRoute as usersBaseApiRoute } from "@real-time-chat/util-api/features/users";
+import { getLoggedInUser_async, IAddUserDto, IUser } from "@real-time-chat/util-api/features/user";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA0voEqZPxWLwtPAupOZ2EQpo0zpQTDmJE",
@@ -41,19 +43,33 @@ export const logout_async = async (): Promise<void> => {
   localStorage.removeItem('userId');
 }
 
-export const registerUser_async = async (email: string, password: string): Promise<string> => {
+export const registerUser_async = async (email: string, username: string, password: string): Promise<IUser> => {
   const response = await auth.createUserWithEmailAndPassword(email, password);
   const user = response.user;
 
   if (!user) throw new Error("Something went wrong in user creation process.");
 
-  const userId: string = user.uid;
+  const userId = user.uid;
+
+  await axios.post(
+    usersBaseApiRoute,
+    {
+      userId,
+      username,
+      email
+    } as IAddUserDto
+  );
+
   storeUserId(userId);
 
-  return userId;
+  return {
+    username,
+    email,
+    _id: userId
+  };
 };
 
-export const signInWithEmailAndPassword_async = async (email: string, password: string): Promise<string> => {
+export const signInWithEmailAndPassword_async = async (email: string, password: string): Promise<IUser> => {
   const response = await auth.signInWithEmailAndPassword(email, password);
   const user = response.user;
 
@@ -62,13 +78,15 @@ export const signInWithEmailAndPassword_async = async (email: string, password: 
   await storeAccessToken();
 
   const userId: string = user.uid;
+
   storeUserId(userId);
 
-  return userId;
+  return getLoggedInUser_async();
 };
 
 axios.interceptors.request.use((config) => {
   if (!config.headers) return config;
+
 
   const accessToken: string | null = getAccessToken();
   if (!accessToken) return config;

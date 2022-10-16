@@ -1,21 +1,16 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import Button from "@mui/material/Button";
-import Alert from "@mui/material/Alert";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Snackbar from "@mui/material/Snackbar";
 import TextField from "@mui/material/TextField";
-import { registerUser_async } from "@real-time-chat/util-shared/auth/auth.service";
-import axios from "axios";
-import { baseApiRoute, IAddUserDto } from "@real-time-chat/util-api/features/users";
-import { useNavigate } from "react-router-dom";
 import {
   FormInputActionKind,
   FormInputState,
   IFormInputAction,
   IFormInputState
 } from "@real-time-chat/util-shared/form/abstractions";
+import useAuth from "@real-time-chat/react-shared/hooks/useAuth";
 
 type FormInputStateType = IFormInputState<string>;
 
@@ -95,10 +90,9 @@ const RegisterPage = () => {
     },
     dispatchPasswordAction
   ] = useReducer(passwordReducer, new FormInputState(''));
+  const { signUp } = useAuth();
 
   const [isFormValid, setIsFormValid] = useState(false);
-  const [{ show, message }, setDisplayNotification] = useState({ show: false, message: undefined });
-  const navigate = useNavigate();
 
   useEffect(() => {
     setIsFormValid(isEmailValid && isUsernameValid && isPasswordValid);
@@ -109,84 +103,59 @@ const RegisterPage = () => {
 
     if (!isEmailValid || !isUsernameValid || !isPasswordValid) return;
 
-    try {
-      const userId = await registerUser_async(email, password);
-      const requestBody: IAddUserDto = { userId, username };
-
-      await axios.post(baseApiRoute, requestBody);
-
-      navigate("/");
-    } catch (e: any) {
-      setDisplayNotification({ message: e.message, show: true });
-    }
+    signUp(email, username, password);
   };
 
   return (
-    <>
-      <div className="h-full w-full flex flex-col items-center justify-center">
-        <Card sx={{ minWidth: 275, width: 275 }}>
-          <CardContent>
-            <form className="flex flex-col gap-2">
-              <TextField
-                value={email}
-                onChange={e => dispatchEmailAction({ payload: e.target.value, type: FormInputActionKind.input })}
-                label='Email'
-                inputProps={{
-                  id: 'email',
-                  type: 'text'
-                }}
-                sx={{ width: '100%' }}
-              />
-              {!isEmailValid && <p>{emailValidationError}</p>}
+    <div className="h-full w-full flex flex-col items-center justify-center">
+      <Card sx={{ minWidth: 275, width: 275 }}>
+        <CardContent>
+          <form className="flex flex-col gap-2">
+            <TextField
+              value={email}
+              onChange={e => dispatchEmailAction({ payload: e.target.value, type: FormInputActionKind.input })}
+              label='Email'
+              inputProps={{
+                id: 'email',
+                type: 'text'
+              }}
+              sx={{ width: '100%' }}
+            />
+            {!isEmailValid && <p>{emailValidationError}</p>}
 
-              <TextField
-                value={username}
-                onChange={e => dispatchUsernameAction({ payload: e.target.value, type: FormInputActionKind.input })}
-                label='Username'
-                inputProps={{
-                  id: 'username',
-                  type: 'text'
-                }}
-                sx={{ width: '100%' }}
-              />
-              {!isUsernameValid && <p>{usernameValidationError}</p>}
+            <TextField
+              value={username}
+              onChange={e => dispatchUsernameAction({ payload: e.target.value, type: FormInputActionKind.input })}
+              label='Username'
+              inputProps={{
+                id: 'username',
+                type: 'text'
+              }}
+              sx={{ width: '100%' }}
+            />
+            {!isUsernameValid && <p>{usernameValidationError}</p>}
 
-              <TextField
-                value={password}
-                onChange={e => dispatchPasswordAction({ payload: e.target.value, type: FormInputActionKind.input })}
-                label='Password'
-                inputProps={{
-                  id: 'password',
-                  type: 'password'
-                }}
-                sx={{ width: '100%' }}
-              />
-              {!isPasswordValid && <p>{passwordValidationError}</p>}
-            </form>
-          </CardContent>
+            <TextField
+              value={password}
+              onChange={e => dispatchPasswordAction({ payload: e.target.value, type: FormInputActionKind.input })}
+              label='Password'
+              inputProps={{
+                id: 'password',
+                type: 'password'
+              }}
+              sx={{ width: '100%' }}
+            />
+            {!isPasswordValid && <p>{passwordValidationError}</p>}
+          </form>
+        </CardContent>
 
-          <CardActions sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Button disabled={!isFormValid} onClick={createUserHandler} size="small" sx={{ width: '100%' }}>
-              Submit
-            </Button>
-          </CardActions>
-        </Card>
-      </div>
-
-      <Snackbar
-        open={show}
-        autoHideDuration={6000}
-        onClose={() => setDisplayNotification({ message: undefined, show: false })}
-      >
-        <Alert
-          onClose={() => setDisplayNotification({ message: undefined, show: false })}
-          severity="error"
-          sx={{ width: '100%' }}
-        >
-          {message}
-        </Alert>
-      </Snackbar>
-    </>
+        <CardActions sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Button disabled={!isFormValid} onClick={createUserHandler} size="small" sx={{ width: '100%' }}>
+            Submit
+          </Button>
+        </CardActions>
+      </Card>
+    </div>
   );
 };
 

@@ -2,10 +2,10 @@ import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../../db/schemas/user.schema';
-import { IAddUserDto } from '@real-time-chat/util-api/features/users/abstractions/user.dto';
+import { IAddUserDto } from '@real-time-chat/util-api/features/user/abstractions/user.dto';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {
   }
 
@@ -25,7 +25,8 @@ export class UsersService {
   public async create(addUserRequest: IAddUserDto): Promise<string> {
     const result: UserDocument = await this.userModel.create({
       _id: addUserRequest.userId,
-      username: addUserRequest.username
+      username: addUserRequest.username,
+      email: addUserRequest.email
     });
 
     return result._id;

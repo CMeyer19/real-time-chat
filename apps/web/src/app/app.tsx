@@ -1,14 +1,10 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useEffect } from "react";
-import LoginPage from "./pages/Login/LoginPage";
 import { socket } from "./services/sockets.service";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import RegisterPage from "./pages/Register/RegisterPage";
-import NotFoundPage from "./pages/NotFound/NotFoundPage";
-import MainPage from "./pages/Main/MainPage";
-import PrivateRoutes from "@real-time-chat/components/PrivateRoutes/PrivateRoutes";
-import Conversation from "./pages/Main/components/conversation";
+import { BrowserRouter } from "react-router-dom";
+import Router from "./routes";
+import { AuthProvider } from "@real-time-chat/react-shared/hooks/useAuth";
 
 axios.defaults.baseURL = 'api';
 
@@ -33,17 +29,9 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Routes>
-          <Route element={<PrivateRoutes/>}>
-            <Route path='/' element={<MainPage/>}>
-              <Route path=":id" element={<Conversation/>}/>
-            </Route>
-          </Route>
-
-          <Route path='/login' element={<LoginPage/>}/>
-          <Route path='/register' element={<RegisterPage/>}/>
-          <Route path='*' element={<NotFoundPage/>}/>
-        </Routes>
+        <AuthProvider>
+          <Router/>
+        </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );

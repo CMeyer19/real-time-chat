@@ -1,8 +1,12 @@
-import { IUser } from "../../users/abstractions/user.dto";
+import { IUser } from "../../user/abstractions/user.dto";
+
+export interface IAddUserAssociationRequest {
+  associationUsername: string;
+}
 
 export interface IAddUserAssociationDto {
-  initiator: string;
-  association: string;
+  initiatorUserId: string;
+  associationUserId: string;
 }
 
 export interface IUserAssociation {

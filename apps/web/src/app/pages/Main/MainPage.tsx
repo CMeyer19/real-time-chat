@@ -5,34 +5,32 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import React, { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import axios from "axios";
 import { baseApiRoute } from "@real-time-chat/util-api/features/conversations";
 import { IAddConversationDto } from "@real-time-chat/util-api/features/conversations/abstractions/conversation.dto";
-import { getUserId, logout_async } from "@real-time-chat/util-shared/auth/auth.service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ContactList } from "./components/contact-list";
 import { ConversationList } from "./components/conversation-list";
 import { ToolbarActions } from "./components/toolbar-actions";
 import LogoutIcon from '@mui/icons-material/Logout';
+import useAuth from "@real-time-chat/react-shared/hooks/useAuth";
 
 const drawerWidth = 340;
 
 export default () => {
-  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const queryClient = useQueryClient();
-  const [showContacts, setShowContacts] = useState(false);
 
+  const [showContacts, setShowContacts] = useState(false);
   const doShowContacts = () => setShowContacts(true);
   const doHideContacts = () => setShowContacts(false);
 
   const createConversation = async (userId: string) => {
-    const currentUserId = getUserId();
-    if (currentUserId == null) return;
-
+    const currentUserId = user._id;
     const requestBody: IAddConversationDto = { isGroupChat: false, participants: [userId, currentUserId] };
     await axios.post(baseApiRoute, requestBody);
   }
@@ -44,11 +42,6 @@ export default () => {
     },
   });
 
-  const logout = async () => {
-    await logout_async();
-    navigate('/login');
-  }
-
   return (
     <Box sx={{ display: 'flex', height: '100%' }}>
       <CssBaseline/>
@@ -59,7 +52,7 @@ export default () => {
       >
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h6" noWrap component="div">
-            Permanent drawer
+            {user.username}
           </Typography>
 
           <IconButton onClick={logout}>
