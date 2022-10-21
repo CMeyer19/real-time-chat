@@ -6,12 +6,12 @@ import { baseApiRoute as usersBaseApiRoute } from "@real-time-chat/util-api/feat
 import { getLoggedInUser_async, IAddUserDto, IUser } from "@real-time-chat/util-api/features/user";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA0voEqZPxWLwtPAupOZ2EQpo0zpQTDmJE",
-  authDomain: "real-time-chat-31ec8.firebaseapp.com",
-  projectId: "real-time-chat-31ec8",
-  storageBucket: "real-time-chat-31ec8.appspot.com",
-  messagingSenderId: "939780098557",
-  appId: "1:939780098557:web:78b4ca8a1174aaf4d13194"
+  apiKey: process.env["NX_FIREBASE_API_KEY"],
+  authDomain: process.env["NX_FIREBASE_AUTH_DOMAIN"],
+  projectId: process.env["NX_FIREBASE_PROJECT_ID"],
+  storageBucket: process.env["NX_FIREBASE_STORAGE_BUCKET"],
+  messagingSenderId: process.env["NX_FIREBASE_MESSAGING_SENDER_ID"],
+  appId: process.env["NX_FIREBASE_APP_ID"],
 };
 
 firebase.initializeApp(firebaseConfig);
