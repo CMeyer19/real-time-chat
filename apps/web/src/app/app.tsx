@@ -1,47 +1,38 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { useEffect, useState } from "react";
-import Grid from "@mui/material/Grid";
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import axios from "axios";
+import React, { useEffect } from "react";
+import { socket } from "./services/sockets.service";
+import { BrowserRouter } from "react-router-dom";
+import Router from "./routes";
+import { AuthProvider } from "@real-time-chat/react-shared/hooks/useAuth";
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
+axios.defaults.baseURL = 'api';
 
-export function App() {
-  const [message, setMessage] = useState('');
+const queryClient = new QueryClient();
 
+export default function App() {
   useEffect(() => {
-    fetch('/api').then(async response => {
-      const responseData: { message: string } = await response.json();
-      setMessage(responseData.message);
-    }).catch(e => console.error(e));
+    socket.on('connect', () => {
+      console.log('Connected');
+    });
 
-    fetch('/api/conversations').then(async response => {
-      const responseData: Array<unknown> = await response.json();
-      console.log(responseData);
-    }).catch(e => console.error(e));
+    socket.on('disconnect', () => {
+      console.log('Disconnected');
+    });
+
+    return () => {
+      socket.off('connect');
+      socket.off('disconnect');
+    };
   }, []);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <p>{message}</p>
-
-      <Grid container spacing={2}>
-        <Grid xs={4}>
-          <Item>xs=4</Item>
-        </Grid>
-        <Grid xs={8}>
-          <Item>xs=8</Item>
-        </Grid>
-      </Grid>
-    </Box>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <AuthProvider>
+          <Router/>
+        </AuthProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
-
-export default App;

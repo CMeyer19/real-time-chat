@@ -2,7 +2,11 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "react-shared": "libs/react-shared",
     "server": "apps/server",
+    "shared": "libs/shared",
+    "util-api": "libs/util-api",
+    "util-shared": "libs/util-shared",
     "web": "apps/web",
     "web-e2e": "apps/web-e2e"
   }

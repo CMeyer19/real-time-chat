@@ -2,7 +2,7 @@ import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Conversation, ConversationDocument } from '../../db/schemas/conversation.schema';
-import { IAddConversationDto } from '../../dtos/conversation.dto';
+import { IAddConversationDto } from '@real-time-chat/util-api/features/conversations/abstractions/conversation.dto';
 
 @Injectable()
 export class ConversationsService {
@@ -15,6 +15,6 @@ export class ConversationsService {
   }
 
   async findAll(): Promise<Conversation[]> {
-    return this.conversationModel.find().exec();
+    return this.conversationModel.find().populate('participants').exec();
   }
 }
